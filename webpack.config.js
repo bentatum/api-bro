@@ -11,10 +11,7 @@ module.exports = {
         loaders: [
             { 
                 test: /\.js$/,
-                loader: 'babel-loader', 
-                query: { 
-                    optional: ["es7.decorators", "es7.classProperties"]
-                }
+                loader: 'babel-loader'
             }
         ]
     }
