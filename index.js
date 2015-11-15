@@ -7,9 +7,10 @@ import isEqual from 'lodash/lang/isEqual'
 
 export default class ApiBro {
 
-    constructor(location='', headers={}) {
+    constructor(location='', headers={}, authToken = null) {
         this.location = location
         this.headers = headers
+        this.authToken = authToken
     }
 
     fullPath(path='') {
@@ -17,9 +18,18 @@ export default class ApiBro {
     }
 
     parseServicePath(path, type, data=null) {
-        return type === 'get' 
-            ? (data ? `${path}?${queryString.stringify(data)}` : path) 
+        return type === 'get'
+            ? (data ? `${path}?${queryString.stringify(data)}` : path)
             : path
+    }
+
+    buildHeaders(){
+        let headers = this.headers
+        if(this.authToken){
+            let token = this.authToken()
+            if(token) headers['Authorization'] = `Bearer ${token}`
+        }
+        return headers
     }
 
     service(type, path, data=null) {
@@ -27,7 +37,7 @@ export default class ApiBro {
         return new Promise((resolve, reject) => {
             let request = {
                 method: type,
-                headers: this.headers,
+                headers: this.buildHeaders(),
             }
             if (type === 'post') {
                 request.body = JSON.stringify(data)
@@ -51,7 +61,7 @@ export default class ApiBro {
                         multiReqRes[key] = res
                         reqKeys = sortBy(keys(req))
                         resKeys = sortBy(keys(multiReqRes))
-                        if (!resKeys.length) 
+                        if (!resKeys.length)
                             return
                         if (isEqual(reqKeys,resKeys))
                             resolve(multiReqRes)
@@ -64,7 +74,7 @@ export default class ApiBro {
     get(path='', data=null) {
         if (typeof path === 'string')
             return this.service('get', this.fullPath(path), data)
-        return this.multiRequestService('get', path) 
+        return this.multiRequestService('get', path)
     }
 
     post(path='', data={}) {
