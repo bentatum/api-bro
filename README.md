@@ -1,22 +1,19 @@
 # ApiBro
 
-## Setup
-Create new api configuration file somewhere in your project. Inside, you can configure and export an Api object for use throughout your application.
 ```
-// Api.js
+// api.js
 export default new ApiBro('https://path.to.your.api.net/')
 ```
 
-## Use
 ```
-// MyApp.js
-import Api from './Api'
+// app.js
+import api from './api'
 
-Api.get('apples', { green: true, red: true })
-    .then(res => doSomethingWithResponse(res))
-    .catch(error => displayError(error))
+api.get('apples', { green: true, red: true })
+    .then(apples => display(apples))
+    .catch(err => oops(err))
 
-Api.post('apples/save', { bushels: 2 })
-    .then(res => showNewApplesToUser(res))
-    .catch(error => displayError(error))
+api.post('apples/store', { apples: [...] })
+    .then(response => display(response))
+    .catch(err => oops(err))
 ```
