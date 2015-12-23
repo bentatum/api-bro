@@ -3,9 +3,10 @@ import queryString from 'query-string'
 
 export default class ApiBro {
 
-    constructor(location='', headers={}) {
+    constructor(location='', headers={}, authToken) {
         this.location = location
         this.headers = headers
+        this.authToken = authToken
     }
 
     fullPath(path='') {
@@ -18,12 +19,19 @@ export default class ApiBro {
             : path
     }
 
+    buildHeaders() {
+        if (this.authToken) {
+            this.headers['Authorization'] = `Bearer ${this.authToken()}`
+        }
+        return this.headers
+    }
+
     service(type, path, data=null) {
         path = this.parseServicePath(path, type, data)
         return new Promise((resolve, reject) => {
             let request = {
                 method: type,
-                headers: this.headers,
+                headers: this.buildHeaders(),
             }
             if (type === 'post') {
                 request.body = JSON.stringify(data)
