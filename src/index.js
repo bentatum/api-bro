@@ -37,9 +37,11 @@ export default class ApiBro {
                 request.body = JSON.stringify(data)
             }
             fetch(path, request)
-                .then(res => res.json())
-                .then(res => resolve(res))
-                .catch(err => reject(err))
+                .then(res => res.ok 
+                    ? resolve(res.json())
+                    : reject({ error: res.statusText })
+                )
+                .catch(error => reject({ error }))
         })
     }
 
