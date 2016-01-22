@@ -39,7 +39,7 @@ export default class ApiBro {
             fetch(path, request)
                 .then(res => res.ok 
                     ? resolve(res.json())
-                    : reject({ error: res.statusText })
+                    : reject(res.json())
                 )
                 .catch(error => reject({ error }))
         })
