@@ -1,13 +1,7 @@
 # ApiBro
 
 ```
-// api.js
-export default new ApiBro('https://path.to.your.api.net/')
-```
-
-```
-// app.js
-import api from './api'
+const api = new ApiBro('https://path.to.your.api.net/')
 
 api.get('apples', { green: true, red: true })
     .then(apples => display(apples))
