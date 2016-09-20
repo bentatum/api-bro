@@ -1,9 +1,8 @@
 
-import { forOwn } from 'lodash.forown'
 import { default as superagent } from 'superagent'
 
 export default class ApiBro {
-  constructor ({ pathPrefix }) {
+  constructor ({ pathPrefix, globalHeaders }) {
     ['get', 'post', 'put', 'patch', 'del'].forEach((method) => {
       this[method] = (path, { params, data, headers } = {}) => new Promise((resolve, reject) => {
         const url = `${pathPrefix}${path}`
@@ -18,8 +17,11 @@ export default class ApiBro {
         if (data) {
           request.send(data)
         }
+        if (globalHeaders) {
+          this.setHeaders(globalHeaders, request)
+        }
         if (headers) {
-          forOwn(headers, (val, key) => request.set(key, val))
+          this.setHeaders(headers, request)
         }
         request.end((err, { body } = {}) => {
           if (err) {
@@ -29,5 +31,13 @@ export default class ApiBro {
         })
       })
     })
+  }
+
+  setHeaders (headers, request) {
+    for (const key in headers) {
+      if (headers.hasOwnProperty(key)) {
+        request.set(key, headers[key])
+      }
+    }
   }
 }
