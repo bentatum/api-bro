@@ -8,14 +8,8 @@ const client = new ApiBro({
   }
 })
 
-client.get('apples', { params: { green: true, red: true } })
-    .then(apples => display(apples))
-    .catch(err => oops(err))
-
+client.get('apples', { params: { green: true, red: true } }).then(...)
 client.post('apples/store', { data: { apples: [...] } })
-    .then(response => display(response))
-    .catch(err => oops(err))
-
 client.patch ...
 client.del ...
 client.put ...
