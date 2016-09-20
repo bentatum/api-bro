@@ -1,6 +1,6 @@
 # ApiBro
 
-```
+```js
 const client = new ApiBro({
   pathPrefix: 'https://path.to.your.api.endpoint',
   globalHeaders: {
