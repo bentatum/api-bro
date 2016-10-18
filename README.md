@@ -16,3 +16,13 @@ client.patch ...
 client.del ...
 client.put ...
 ```
+
+## Optional parameters
+
+`pathPrefix` Add a prefixed string to each request.
+
+`globalHeaders` Add headers to each request.
+
+`globalParams` Add params to all applicable requests.
+
+`globalData` Add data to all applicable requests

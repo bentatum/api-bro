@@ -2,27 +2,48 @@
 import { default as superagent } from 'superagent'
 
 export default class ApiBro {
-  constructor ({ pathPrefix, globalHeaders } = {}) {
+  constructor ({ pathPrefix, globalHeaders, globalParams, globalData } = {}) {
     ['get', 'post', 'put', 'patch', 'del'].forEach((method) => {
       this[method] = (path, { params, data, headers } = {}) => new Promise((resolve, reject) => {
         const url = `${pathPrefix}${path}`
         const request = superagent[method](url)
+
         request.set('Accept', 'application/json')
+
         if (method === 'post') {
           request.set('Content-Type', 'application/json')
         }
+
         if (params) {
-          request.query(params)
+          if (globalParams) {
+            request.query({
+              ...globalParams,
+              ...params
+            })
+          } else {
+            request.query(params)
+          }
         }
+
         if (data) {
-          request.send(data)
+          if (globalData) {
+            request.send({
+              ...globalData,
+              ...data
+            })
+          } else {
+            request.send(data)
+          }
         }
+
         if (globalHeaders) {
           this.setHeaders(globalHeaders, request)
         }
+
         if (headers) {
           this.setHeaders(headers, request)
         }
+
         request.end((err, { body } = {}) => {
           if (err) {
             return reject(body || err)
