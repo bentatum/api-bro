@@ -2,7 +2,7 @@
 import { default as superagent } from 'superagent'
 
 export default class ApiBro {
-  constructor ({ pathPrefix, globalHeaders }) {
+  constructor ({ pathPrefix, globalHeaders } = {}) {
     ['get', 'post', 'put', 'patch', 'del'].forEach((method) => {
       this[method] = (path, { params, data, headers } = {}) => new Promise((resolve, reject) => {
         const url = `${pathPrefix}${path}`
