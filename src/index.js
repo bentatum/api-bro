@@ -2,11 +2,15 @@
 import { default as superagent } from 'superagent'
 
 export default class ApiBro {
-  constructor ({ pathPrefix, globalHeaders, globalParams, globalData } = {}) {
+  constructor ({ withCredentials, pathPrefix, globalHeaders, globalParams, globalData } = {}) {
     ['get', 'post', 'put', 'patch', 'del'].forEach((method) => {
       this[method] = (path, { params, data, headers } = {}) => new Promise((resolve, reject) => {
         const url = `${pathPrefix}${path}`
-        const request = superagent[method](url)
+        let request = superagent[method](url)
+
+        if (withCredentials) {
+          request = request.withCredentials()
+        }
 
         request.set('Accept', 'application/json')
 

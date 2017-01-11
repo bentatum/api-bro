@@ -17,7 +17,17 @@ client.del ...
 client.put ...
 ```
 
+```js
+// or if you're using cookies
+const client = new ApiBro({
+  pathPrefix: 'https://path.to.your.api.endpoint',
+  withCredentials: true
+})
+```
+
 ## Optional parameters
+
+`withCredentials` Add withCredentials() to all requests.
 
 `pathPrefix` Add a prefixed string to each request.
 
